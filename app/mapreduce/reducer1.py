@@ -1,1 +1,6 @@
-print("this is reducer 1")
+#reducer1.py
+#!/usr/bin/env python3
+import sys
+
+for line in sys.stdin:
+    print(line.strip())
