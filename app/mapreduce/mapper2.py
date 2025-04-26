@@ -1,6 +1,8 @@
-#!/usr/bin/env python3
 import sys
 
+import sys
+sys.stderr.write("mapper2.py started\n")
+sys.stderr.flush()
 
 def main():
     for line in sys.stdin:

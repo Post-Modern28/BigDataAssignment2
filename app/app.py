@@ -4,20 +4,16 @@ from cassandra.cluster import Cluster
 cluster = Cluster(["cassandra-server"])
 session = cluster.connect()
 
-
 # Create keyspace and tables
 print("Creating keyspace and tables...")
 
-# Create keyspace
 session.execute("""
     CREATE KEYSPACE IF NOT EXISTS search_index
     WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 1};
 """)
 
-# Use the keyspace
 session.execute("USE search_index;")
 
-# Create tables
 session.execute("""
     CREATE TABLE IF NOT EXISTS vocabulary (
         term text PRIMARY KEY,
@@ -56,5 +52,25 @@ session.execute("""
 
 print("Keyspace and tables created successfully!")
 
-# # Close the connection
+
+print("Inserting BM25 scores into bm25_scores table...")
+
+insert_stmt = session.prepare("""
+    INSERT INTO bm25_scores (term, doc_id, score) VALUES (?, ?, ?)
+""")
+
+with open("output_stage2.txt", "r", encoding="utf-8") as f:
+    for line in f:
+        line = line.strip()
+        if not line:
+            continue
+        parts = line.split("\t")
+        if len(parts) != 3:
+            continue
+        term, doc_id, score = parts
+        score = float(score)
+        session.execute(insert_stmt, (term, doc_id, score))
+
+print("BM25 scores inserted successfully!")
+
 # session.shutdown()

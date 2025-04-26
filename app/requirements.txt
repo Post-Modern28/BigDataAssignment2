@@ -6,3 +6,4 @@ wheel
 pathvalidate
 pyspark
 tqdm
+cqlsh

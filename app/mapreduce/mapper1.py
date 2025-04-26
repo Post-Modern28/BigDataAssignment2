@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 import re
 import sys
@@ -13,53 +12,52 @@ def tokenize(text):
 
 
 def main():
-    # Limit the number of documents to process
-    LIMIT = 100
+    LIMIT = 1000
     counter = 0
+    processing = True
 
     for line in sys.stdin:
-        if counter >= LIMIT:
-            break
         line = line.strip()
-        parts = line.split('\t', 2)
-        if len(parts) != 3:
-            # print(f"Skipping invalid line: {line}", file=sys.stderr)
-            continue  # или можно log'нуть: print(f"Skipping invalid line: {line}", file=sys.stderr)
+        if not line:
+            continue
 
-        doc_id, title, content = line.strip().split('\t', 2)
+        if processing:
+            parts = line.split('\t', 2)
+            if len(parts) != 3:
+                continue
 
-        # Tokenize content
-        tokens = tokenize(content)
+            doc_id, title, content = parts
+            tokens = tokenize(content)
+            doc_length = len(tokens)
 
-        # Calculate document length
-        doc_length = len(tokens)
+            term_freq = {}
+            term_positions = {}
+            for pos, term in enumerate(tokens):
+                if term not in term_freq:
+                    term_freq[term] = 0
+                    term_positions[term] = []
+                term_freq[term] += 1
+                term_positions[term].append(pos)
 
-        # Calculate term frequencies and positions
-        term_freq = {}
-        term_positions = {}
-        for pos, term in enumerate(tokens):
-            if term not in term_freq:
-                term_freq[term] = 0
-                term_positions[term] = []
-            term_freq[term] += 1
-            term_positions[term].append(pos)
+            # Emit document statistics
+            print(f"STATS\t{doc_id}\t{title}\t{doc_length}\t{sum(term_freq.values()) / len(term_freq) if term_freq else 0}")
 
-        # Emit document statistics
-        print(f"STATS\t{doc_id}\t{title}\t{doc_length}\t{sum(term_freq.values()) / len(term_freq) if term_freq else 0}")
+            # Emit term frequencies and positions
+            for term, freq in term_freq.items():
+                positions = term_positions[term]
+                print(f"{term}\t{doc_id}\t{freq}\t{','.join(map(str, positions))}")
 
-        # Emit term frequencies and positions
-        for term, freq in term_freq.items():
-            positions = term_positions[term]
-            print(f"{term}\t{doc_id}\t{freq}\t{','.join(map(str, positions))}")
+            counter += 1
+            if counter >= LIMIT:
+                processing = False
+        else:
 
-        # Increment the counter
-        counter += 1
-
+            continue
 
 if __name__ == "__main__":
     main()
     # sys.stderr.write("Mapper1 finished\n")
-    # sys.stderr.flush()
+    sys.stderr.flush()
 
 # import sys
 # import re
