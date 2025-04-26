@@ -1,16 +1,30 @@
 #!/bin/bash
 # This will run only by the master node
 
-# starting HDFS daemons
+#!/bin/bash
+echo "Starting HDFS daemons..."
 $HADOOP_HOME/sbin/start-dfs.sh
 
-# starting Yarn daemons
+# Wait for Namenode to be available
+echo "Waiting for HDFS to be ready..."
+for i in {1..10}; do
+  hdfs dfsadmin -report > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    echo "HDFS is up!"
+    break
+  fi
+  echo "Retrying in 3s..."
+  sleep 3
+done
+
+# Continue only if HDFS is up
+hdfs dfsadmin -safemode leave
+
+echo "Starting YARN..."
 $HADOOP_HOME/sbin/start-yarn.sh
-# yarn --daemon start resourcemanager
 
-# Start mapreduce history server
+echo "Starting MapReduce HistoryServer..."
 mapred --daemon start historyserver
-
 
 # track process IDs of services
 jps -lm
