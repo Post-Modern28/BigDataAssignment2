@@ -22,8 +22,6 @@ spark = SparkSession.builder \
     .config("spark.cassandra.connection.host", "cassandra-server") \
     .config("spark.cassandra.connection.port", "9042") \
     .config("spark.sql.catalog.cassandracat", "com.datastax.spark.connector.datasource.CassandraCatalog") \
-    .config("spark.executor.memory", "512m") \
-    .config("spark.driver.memory", "512m") \
     .getOrCreate()
 
 sc = spark.sparkContext
