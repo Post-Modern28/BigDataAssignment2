@@ -35,21 +35,21 @@ done
 
 
 
-#apt install dos2unix
-#dos2unix ./mapreduce/mapper1.py
-#dos2unix ./mapreduce/reducer1.py
-#dos2unix ./mapreduce/mapper2.py
-#dos2unix ./mapreduce/reducer2.py
-#
-#chmod +x ./mapreduce/mapper1.py
-#chmod +x ./mapreduce/reducer1.py
-#chmod +x ./mapreduce/mapper2.py
-#chmod +x ./mapreduce/reducer2.py
+apt install dos2unix
+dos2unix ./mapreduce/mapper1.py
+dos2unix ./mapreduce/reducer1.py
+dos2unix ./mapreduce/mapper2.py
+dos2unix ./mapreduce/reducer2.py
+
+chmod +x ./mapreduce/mapper1.py
+chmod +x ./mapreduce/reducer1.py
+chmod +x ./mapreduce/mapper2.py
+chmod +x ./mapreduce/reducer2.py
 
 
 echo "Running indexer"
 
-#bash index.sh
+bash index.sh
 
 ## Run the ranker
 echo "Running search"
