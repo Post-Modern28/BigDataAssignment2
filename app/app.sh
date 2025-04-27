@@ -32,21 +32,27 @@ for i in {1..10}; do
 done
 
 
-apt install dos2unix
-dos2unix ./mapreduce/mapper1.py
-dos2unix ./mapreduce/reducer1.py
 
-head -n 1 ./mapreduce/mapper1.py | cat -v
-chmod +x ./mapreduce/mapper1.py
-chmod +x ./mapreduce/reducer1.py
 
+
+#apt install dos2unix
+#dos2unix ./mapreduce/mapper1.py
+#dos2unix ./mapreduce/reducer1.py
+#dos2unix ./mapreduce/mapper2.py
+#dos2unix ./mapreduce/reducer2.py
+#
+#chmod +x ./mapreduce/mapper1.py
+#chmod +x ./mapreduce/reducer1.py
+#chmod +x ./mapreduce/mapper2.py
+#chmod +x ./mapreduce/reducer2.py
 
 
 echo "Running indexer"
 
-bash index.sh
+#bash index.sh
 
+## Run the ranker
+echo "Running search"
+bash search.sh "Bangladeshi politician and former Mayor of Chittagong City Corporation"
+echo "Finished."
 tail -f /dev/null
-##
-### Run the ranker
-##bash search.sh "this is a query!"

@@ -27,9 +27,9 @@ hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar \
     -cmdenv PYTHONIOENCODING=utf8
 
 if [ $? -eq 0 ]; then
-    echo "✅ MapReduce job Stage 1 completed successfully!"
+    echo "✅  MapReduce job Stage 1 completed successfully!"
 else
-    echo "❌ MapReduce job Stage 1 FAILED."
+    echo "❌  MapReduce job Stage 1 FAILED."
     exit 1
 fi
 
@@ -39,7 +39,7 @@ echo "Head of part 0:"
 hdfs dfs -cat /tmp/index/part-00000 | head -n 10
 
 
-echo "Stage 2: Running MapReduce job for BM25 calculation"
+echo "Stage 2: Calculating metrics"
 hdfs dfs -rm -r -f /tmp/index_stage2 || true
 
 hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar \
@@ -68,7 +68,7 @@ echo "Verifying data in Cassandra..."
 cqlsh cassandra-server -e "USE search_index; SELECT * FROM vocabulary LIMIT 10;"
 cqlsh cassandra-server -e "USE search_index; SELECT * FROM document_stats LIMIT 10;"
 cqlsh cassandra-server -e "USE search_index; SELECT * FROM inverted_index LIMIT 10;"
-cqlsh cassandra-server -e "USE search_index; SELECT * FROM bm25_scores LIMIT 10;"
+
 
 
 echo "Indexing completed successfully!"

@@ -33,4 +33,4 @@ hdfs dfs -put index/data /user/root/ || echo "Failed to put index files in /user
 #hdfs dfs -cat /user/root/index/data/part-00000* | head -n 10
 
 
-echo "done data preparation!"
+echo "Done data preparation!"
